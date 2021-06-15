@@ -56,8 +56,26 @@ export default function useApplicationData() {
     });
   }, []);
 
+  // const getSpotsForDay = (dayObj, appointments) => {
+  //   let spots = 0;
+  //   for (const id of dayObj.appointments) {
+  //     const appointment = appointments[id];
+  //     if(!appointment.interview) {
+  //       spots++;
+  //     }
+  //   }
+  //   return spots
+  // }
+  // const updateSpots = (dayName, days, appointments) => {
+  //   const dayObj = days.find(day => day.name === dayName);
+  //   const spots = getSpotsForDay(dayObj, appointments);
+  //   const newDay = {...days};
+  //   newDay.spots = spots
+  //   const newDays = days.map(day => day.name === dayName ? newDay : day);
+  //   return newDays;
+  // }
+
   const updateSpots = (dayName, days, appointments) => {
-    // state.days.spots
     let currentDay = "";
     let spots = 0;
     for (let day of days) {
