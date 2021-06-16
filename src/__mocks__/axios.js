@@ -54,7 +54,7 @@ const fixtures = {
 };
 export default {
   defaults: { baseURL: "" },
-  get: (url) => {
+  get: jest.fn((url) => {
     if (url === "/api/days") {
       return Promise.resolve({
         status: 204,
@@ -63,7 +63,6 @@ export default {
       });
     }
     if (url === "/api/appointments") {
-      /* Resolve appointments data */
       return Promise.resolve({
         status: 204,
         statusText: "No Content",
@@ -71,15 +70,20 @@ export default {
       });
     }
     if (url === "/api/interviewers") {
-      /* Resolve interviewers data */
       return Promise.resolve({
         status: 204,
         statusText: "No Content",
         data: fixtures.interviewers,
       });
     }
-  },
-  put: (url) => {
+  }),
+  put: jest.fn((url, body) => {
+    if (body.interview.student === "error") {
+      return Promise.reject(new Error("edit error"));
+    }
     return Promise.resolve({ status: 204, statusText: "No Content" });
-  },
+  }),
+  delete: jest.fn((url) => {
+    return Promise.resolve({ status: 204, statusText: "No Content" });
+  }),
 };
