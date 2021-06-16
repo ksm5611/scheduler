@@ -41,9 +41,9 @@ export default function useApplicationData() {
 
   useEffect(() => {
     Promise.all([
-      axios.get("http://localhost:8001/api/days"),
-      axios.get("http://localhost:8001/api/appointments"),
-      axios.get("http://localhost:8001/api/interviewers"),
+      axios.get("/api/days"),
+      axios.get("/api/appointments"),
+      axios.get("/api/interviewers"),
     ]).then((all) => {
       dispatch({
         type: SET_APPLICATION_DATA,
@@ -56,39 +56,23 @@ export default function useApplicationData() {
     });
   }, []);
 
-  // const getSpotsForDay = (dayObj, appointments) => {
-  //   let spots = 0;
-  //   for (const id of dayObj.appointments) {
-  //     const appointment = appointments[id];
-  //     if(!appointment.interview) {
-  //       spots++;
-  //     }
-  //   }
-  //   return spots
-  // }
-  // const updateSpots = (dayName, days, appointments) => {
-  //   const dayObj = days.find(day => day.name === dayName);
-  //   const spots = getSpotsForDay(dayObj, appointments);
-  //   const newDay = {...days};
-  //   newDay.spots = spots
-  //   const newDays = days.map(day => day.name === dayName ? newDay : day);
-  //   return newDays;
-  // }
-
-  const updateSpots = (dayName, days, appointments) => {
-    let currentDay = "";
+  const getSpotsForDay = (dayObj, appointments) => {
     let spots = 0;
-    for (let day of days) {
-      if (day.name === dayName) {
-        currentDay = day;
-      }
-    }
-    for (let id of currentDay.appointments) {
-      if (appointments[id].interview === null) {
+    for (const id of dayObj.appointments) {
+      const appointment = appointments[id];
+      if (!appointment.interview) {
         spots++;
       }
     }
     return spots;
+  };
+  const updateSpots = (dayName, days, appointments) => {
+    const dayObj = days.find((day) => day.name === dayName);
+    const spots = getSpotsForDay(dayObj, appointments);
+    const newDay = { ...dayObj, spots };
+
+    const newDays = days.map((day) => (day.name === dayName ? newDay : day));
+    return newDays;
   };
 
   function bookInterview(id, interview) {
@@ -104,15 +88,8 @@ export default function useApplicationData() {
     return axios
       .put(`http://localhost:8001/api/appointments/${id}`, { interview })
       .then(() => {
-        const newDays = state.days.map((day) => {
-          if (day.name === state.day) {
-            return {
-              ...day,
-              spots: updateSpots(day.name, state.days, state.appointments),
-            };
-          }
-          return day;
-        });
+        const newDays = updateSpots(state.day, state.days, appointments);
+
         dispatch({
           type: SET_INTERVIEW,
           value: { appointments, days: newDays },
@@ -123,6 +100,7 @@ export default function useApplicationData() {
   function cancelInterview(id) {
     const appointment = {
       ...state.appointments[id],
+      interview: null,
     };
     const appointments = {
       ...state.appointments,
@@ -133,15 +111,7 @@ export default function useApplicationData() {
         interview: null,
       })
       .then(() => {
-        const loseDays = state.days.map((day) => {
-          if (day.name === state.day) {
-            return {
-              ...day,
-              spots: updateSpots(day.name, state.days, state.appointments),
-            };
-          }
-          return day;
-        });
+        const loseDays = updateSpots(state.day, state.days, appointments);
         dispatch({
           type: SET_INTERVIEW,
           value: { appointments, days: loseDays },

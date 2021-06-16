@@ -14,7 +14,6 @@ import "components/Application.scss";
 export default function Application(props) {
   const { state, setDay, bookInterview, cancelInterview } =
     useApplicationData();
-  console.log(state);
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   const arrayOfappointments = dailyAppointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
