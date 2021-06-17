@@ -8,6 +8,7 @@ import "./InterviewerList.scss";
 function InterviewerList(props) {
   const interviewerList = classnames("interviewers");
 
+  // to show list of interviewers
   const listOfInterviwers = props.interviewers.map((interviewer) => {
     return (
       <InterviewerListItem

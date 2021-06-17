@@ -1,3 +1,4 @@
+//mock data
 const fixtures = {
   days: [
     {
@@ -52,9 +53,12 @@ const fixtures = {
     },
   },
 };
+
+// mock api's
 export default {
   defaults: { baseURL: "" },
   get: (url) => {
+    console.log(url);
     if (url === "/api/days") {
       return Promise.resolve({
         status: 204,
@@ -77,10 +81,10 @@ export default {
       });
     }
   },
-  put: (url) => {
+  put: () => {
     return Promise.resolve({ status: 204, statusText: "No Content" });
   },
-  delete: (url) => {
-    return Promise.resolve({ status: 204, statusText: "No Content" });
+  delete: () => {
+    return Promise.resolve({ status: 204, statusText: "Deleted" });
   },
 };

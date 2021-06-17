@@ -39,6 +39,7 @@ export default function useApplicationData() {
 
   const setDay = (day) => dispatch({ type: SET_DAY, value: day });
 
+  //fetching api
   useEffect(() => {
     Promise.all([
       axios.get("/api/days"),
@@ -66,6 +67,8 @@ export default function useApplicationData() {
     }
     return spots;
   };
+
+  //updating remaining spots when the interview exist or not
   const updateSpots = (dayName, days, appointments) => {
     const dayObj = days.find((day) => day.name === dayName);
     const spots = getSpotsForDay(dayObj, appointments);
@@ -74,7 +77,7 @@ export default function useApplicationData() {
     const newDays = days.map((day) => (day.name === dayName ? newDay : day));
     return newDays;
   };
-
+  //to book interview
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -96,7 +99,7 @@ export default function useApplicationData() {
         });
       });
   }
-
+  //to cancel interciew
   function cancelInterview(id) {
     const appointment = {
       ...state.appointments[id],
