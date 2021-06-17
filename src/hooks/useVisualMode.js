@@ -10,7 +10,6 @@ export default function useVisualMode(initial) {
     }
     setMode(newMode);
     setHistory((prev) => [...prev, newMode]);
-    // setHistory([...history, newMode]);
   };
 
   const back = () => {
