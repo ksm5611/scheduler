@@ -15,6 +15,7 @@ export default function useApplicationData() {
     interviewers: {},
   });
 
+  // to set the current day
   const setDay = (day) => dispatch({ type: SET_DAY, value: day });
 
   //fetching api
@@ -35,6 +36,7 @@ export default function useApplicationData() {
     });
   }, []);
 
+  // to get spots day for interview
   const getSpotsForDay = (dayObj, appointments) => {
     let spots = 0;
     for (const id of dayObj.appointments) {
