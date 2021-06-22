@@ -98,7 +98,7 @@ export default function Appointment(props) {
       )}
       {mode === ERROR_SAVE && (
         <Error
-          onClose={() => back()}
+          onClose={() => transition(CREATE)}
           message={"Could not update appointment."}
         />
       )}
